@@ -7,7 +7,6 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.EndpointHitDto;
 import ru.practicum.ViewStats;
 import ru.practicum.mapper.EndpointHitMapper;
-import ru.practicum.model.EndpointHit;
 import ru.practicum.repository.StatRepository;
 
 import java.time.LocalDateTime;
