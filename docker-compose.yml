@@ -1,6 +1,8 @@
 services:
   stats-server:
-    build: stats/stat-server
+    build:
+      context: .
+      dockerfile: stats/stat-server/Dockerfile
     image: stat-server
     container_name: stat-server
     ports:
