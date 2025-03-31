@@ -1,8 +1,8 @@
 services:
   stats-server:
     build:
-      context: .
-      dockerfile: stats/stat-server/Dockerfile
+      context: stats/stat-server
+      dockerfile: Dockerfile
     image: stat-server
     container_name: stat-server
     ports:
@@ -30,7 +30,9 @@ services:
       retries: 10
 
   ewm-service:
-    build: main-service
+    build:
+      context: main-service
+      dockerfile: Dockerfile
     image: ewm-service
     container_name: ewm-service
     ports:
@@ -41,7 +43,7 @@ services:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://ewm-db:5432/ewm-db
       - SPRING_DATASOURCE_USERNAME=ignat
       - SPRING_DATASOURCE_PASSWORD=password
-      - STATS_SERVER_URL=http://stats-server:9090
+      - STATS_SERVER_URL=http://stat-server:9090
 
   ewm-db:
     image: postgres:16.1
