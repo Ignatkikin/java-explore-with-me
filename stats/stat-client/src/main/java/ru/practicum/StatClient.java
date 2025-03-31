@@ -63,7 +63,8 @@ public class StatClient {
                     .onStatus(HttpStatusCode::is5xxServerError, (req, res) -> {
                         throw new RuntimeException("Server error: " + res.getStatusCode());
                     })
-                    .body(new ParameterizedTypeReference<>() {});
+                    .body(new ParameterizedTypeReference<>() {
+                    });
         } catch (Exception e) {
             log.error("Error while getting stats", e);
             return List.of();
