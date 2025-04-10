@@ -15,6 +15,9 @@ public class EventSpecifications {
 
     public static Specification<Event> textInAnnotationOrDescription(String text) {
         return (root, query, cb) -> {
+            if (text == null || text.isEmpty()) {
+                return cb.conjunction();
+            }
             String likeText = "%" + text.toLowerCase() + "%";
             return cb.or(
                     cb.like(cb.lower(root.get("annotation")), likeText),
@@ -24,19 +27,39 @@ public class EventSpecifications {
     }
 
     public static Specification<Event> inCategories(List<Long> categories) {
-        return (root, query, cb) -> root.get("category").get("id").in(categories);
+        return (root, query, cb) -> {
+            if (categories == null || categories.isEmpty()) {
+                return cb.conjunction();
+            }
+            return root.get("category").get("id").in(categories);
+        };
     }
 
     public static Specification<Event> isPaid(Boolean paid) {
-        return (root, query, cb) -> cb.equal(root.get("paid"), paid);
+        return (root, query, cb) -> {
+            if (paid == null) {
+                return cb.conjunction();
+            }
+            return cb.equal(root.get("paid"), paid);
+        };
     }
 
     public static Specification<Event> rangeStart(LocalDateTime start) {
-        return (root, query, cb) -> cb.greaterThanOrEqualTo(root.get("eventDate"), start);
+        return (root, query, cb) -> {
+            if (start == null) {
+                return cb.conjunction();
+            }
+            return cb.greaterThanOrEqualTo(root.get("eventDate"), start);
+        };
     }
 
     public static Specification<Event> rangeEnd(LocalDateTime end) {
-        return (root, query, cb) -> cb.lessThanOrEqualTo(root.get("eventDate"), end);
+        return (root, query, cb) -> {
+            if (end == null) {
+                return cb.conjunction();
+            }
+            return cb.lessThanOrEqualTo(root.get("eventDate"), end);
+        };
     }
 
     public static Specification<Event> onlyAvailable() {
@@ -47,10 +70,20 @@ public class EventSpecifications {
     }
 
     public static Specification<Event> initiators(List<Long> userIds) {
-        return (root, query, cb) -> root.get("initiator").get("id").in(userIds);
+        return (root, query, cb) -> {
+            if (userIds == null || userIds.isEmpty()) {
+                return cb.conjunction();
+            }
+            return root.get("initiator").get("id").in(userIds);
+        };
     }
 
     public static Specification<Event> statesIn(List<EventState> states) {
-        return (root, query, cb) -> root.get("state").in(states);
+        return (root, query, cb) -> {
+            if (states == null || states.isEmpty()) {
+                return cb.conjunction();
+            }
+            return root.get("state").in(states);
+        };
     }
 }

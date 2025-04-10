@@ -1,8 +1,10 @@
 package ru.practicum.exception.controller;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -17,6 +19,32 @@ import java.util.stream.Collectors;
 @Slf4j
 @RestControllerAdvice
 public class ErrorHandler {
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public ApiError handleDataIntegrityViolationException(DataIntegrityViolationException e) {
+        log.warn("409 {}", e.getMessage(), e);
+        return ApiError.builder()
+                .message("Ошибка: нарушение целостности данных")
+                .reason("Нарушение уникальности в базе данных")
+                .status(HttpStatus.CONFLICT.name())
+                .errors(Collections.singletonList(e.getMessage()))
+                .timestamp(LocalDateTime.now())
+                .build();
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ApiError handleMissingServletRequestParameterException(MissingServletRequestParameterException e) {
+        log.warn("400 {}", e.getMessage(), e);
+        return ApiError.builder()
+                .message("Ошибка валидации параметров запроса")
+                .reason("Некорректный запрос")
+                .status(HttpStatus.BAD_REQUEST.name())
+                .errors(Collections.singletonList(e.getMessage()))
+                .timestamp(LocalDateTime.now())
+                .build();
+    }
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)

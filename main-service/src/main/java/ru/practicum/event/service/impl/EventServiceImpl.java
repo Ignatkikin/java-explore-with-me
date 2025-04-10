@@ -383,12 +383,22 @@ public class EventServiceImpl implements EventService {
         if (events.isEmpty()) {
             return;
         }
-        List<String> uris = events.stream()
-                .map(event -> "/events/" + event.getId())
-                .toList();
+        List<String> uris = new ArrayList<>();
+        LocalDateTime start = null;
 
-        List<ViewStats> stats = statClient.getStats(LocalDateTime.now().minusYears(20),
-                LocalDateTime.now(), uris, true);
+        for (Event event : events) {
+            if (event.getPublishedOn() != null) {
+                String uri = "/events/" + event.getId();
+                uris.add(uri);
+                if (start == null || event.getPublishedOn().isBefore(start)) {
+                    start = event.getPublishedOn();
+                }
+            }
+        }
+        if (start == null) {
+            return;
+        }
+        List<ViewStats> stats = statClient.getStats(start, LocalDateTime.now(), uris, true);
 
         Map<String, Long> viewsMap = stats.stream()
                 .collect(Collectors.toMap(ViewStats::getUri, ViewStats::getHits));
