@@ -343,6 +343,12 @@ public class EventServiceImpl implements EventService {
         Pageable pageable = PageRequest.of(from / size, size);
         List<Event> events = eventRepository.findAll(spec, pageable).getContent();
 
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+
         setViews(events);
 
         if (sort != null) {
@@ -375,6 +381,13 @@ public class EventServiceImpl implements EventService {
                 .ip(ip)
                 .timestamp(LocalDateTime.now())
                 .build());
+
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+
         setViews(List.of(event));
         return eventMapper.toFullDto(event);
     }
@@ -399,7 +412,10 @@ public class EventServiceImpl implements EventService {
             return;
         }
         List<ViewStats> stats = statClient.getStats(start, LocalDateTime.now(), uris, true);
-
+        if (stats.isEmpty()) {
+            log.info("Нет данных о просмотрах для событий: {}", uris);
+            return;
+        }
         Map<String, Long> viewsMap = stats.stream()
                 .collect(Collectors.toMap(ViewStats::getUri, ViewStats::getHits));
 
