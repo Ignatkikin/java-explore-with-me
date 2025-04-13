@@ -1,5 +1,6 @@
 package ru.practicum.exception;
 
+import jakarta.validation.ValidationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.MissingServletRequestParameterException;
@@ -34,6 +35,19 @@ public class ErrorHandler {
         return ApiError.builder()
                 .message(e.getMessage())
                 .reason("Некорректные параметры запроса")
+                .status(HttpStatus.BAD_REQUEST.name())
+                .errors(Collections.singletonList(e.getMessage()))
+                .timestamp(LocalDateTime.now())
+                .build();
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ApiError handleValidationException(ValidationException e) {
+        log.warn("400 {}", e.getMessage(), e);
+        return ApiError.builder()
+                .message(e.getMessage())
+                .reason("Ошибка валидации данных запроса")
                 .status(HttpStatus.BAD_REQUEST.name())
                 .errors(Collections.singletonList(e.getMessage()))
                 .timestamp(LocalDateTime.now())

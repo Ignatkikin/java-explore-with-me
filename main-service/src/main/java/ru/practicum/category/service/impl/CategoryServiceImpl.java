@@ -13,9 +13,12 @@ import ru.practicum.category.mapper.CategoryMapper;
 import ru.practicum.category.model.Category;
 import ru.practicum.category.repository.CategoryRepository;
 import ru.practicum.category.service.CategoryService;
+import ru.practicum.event.repository.EventRepository;
+import ru.practicum.exception.ConflictException;
 import ru.practicum.exception.NotFoundException;
 
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -24,6 +27,7 @@ import java.util.List;
 public class CategoryServiceImpl implements CategoryService {
     private final CategoryRepository categoryRepository;
     private final CategoryMapper categoryMapper;
+    private final EventRepository eventRepository;
 
     @Override
     public CategoryDto createCategory(CategoryRequestDto categoryRequestDto) {
@@ -35,6 +39,10 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public CategoryDto updateCategory(CategoryRequestDto categoryRequestDto, Long categoryId) {
+        Optional<Category> existing = categoryRepository.findByName(categoryRequestDto.getName());
+        if (existing.isPresent() && !existing.get().getId().equals(categoryId)) {
+            throw new ConflictException("Категория с таким именем уже существует");
+        }
         Category oldCategory = checkCategory(categoryId);
         oldCategory.setName(categoryRequestDto.getName());
         CategoryDto categoryDto = categoryMapper.toCategoryDto(categoryRepository.save(oldCategory));
@@ -45,6 +53,9 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public void delete(Long categoryId) {
         checkCategory(categoryId);
+        if (eventRepository.existsByCategoryId(categoryId)) {
+            throw new ConflictException("Нельзя удалить категорию, к которой привязаны события");
+        }
         categoryRepository.deleteById(categoryId);
         log.info("Category с id {} успешно удалена", categoryId);
     }

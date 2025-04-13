@@ -57,6 +57,7 @@ public class EventServiceImpl implements EventService {
     private final RequestMapper requestMapper;
 
     @Override
+    @Transactional(readOnly = true)
     public List<EventShortDto> getEvents(Long userId, int from, int size) {
         checkUser(userId);
         Pageable pageable = PageRequest.of(from / size, size);
@@ -86,6 +87,7 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public EventFullDto getEventById(Long userId, Long eventId) {
         User user = checkUser(userId);
         Event event = checkEvent(eventId);
@@ -152,6 +154,7 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<ParticipationRequestDto> getRequests(Long userId, Long eventId) {
         User user = checkUser(userId);
         Event event = checkEvent(eventId);
@@ -188,15 +191,14 @@ public class EventServiceImpl implements EventService {
             }
 
             if (dto.getStatus() == RequestState.CONFIRMED) {
-                if (available > 0) {
-                    request.setStatus(RequestState.CONFIRMED);
-                    available--;
-                    event.setConfirmedRequests(event.getConfirmedRequests() + 1);
-                    confirmed.add(requestMapper.toRequestDto(request));
-                } else {
-                    request.setStatus(RequestState.REJECTED);
-                    rejected.add(requestMapper.toRequestDto(request));
+                if (available <= 0) {
+                    throw new ConflictException("Лимит участников достигнут. Подтверждение невозможно.");
                 }
+
+                request.setStatus(RequestState.CONFIRMED);
+                available--;
+                event.setConfirmedRequests(event.getConfirmedRequests() + 1);
+                confirmed.add(requestMapper.toRequestDto(request));
             } else if (dto.getStatus() == RequestState.REJECTED) {
                 request.setStatus(RequestState.REJECTED);
                 rejected.add(requestMapper.toRequestDto(request));
@@ -214,6 +216,7 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<EventFullDto> getEventsAdmin(List<Long> userIds, List<String> states, List<Long> categories,
                                              LocalDateTime rangeStart, LocalDateTime rangeEnd, int from, int size) {
         if (rangeStart != null && rangeEnd != null && rangeStart.isAfter(rangeEnd)) {
@@ -307,11 +310,12 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<EventShortDto> getEventsPublic(String text, List<Long> categories, Boolean paid,
                                                LocalDateTime rangeStart, LocalDateTime rangeEnd, Boolean onlyAvailable,
                                                String sort, int from, int size, HttpServletRequest httpServletRequest) {
 
-        String uri = httpServletRequest.getRequestURI();
+        String uri = "/events";
         String ip = httpServletRequest.getRemoteAddr();
         statClient.createHit(EndpointHitDto.builder()
                 .app("main-service")
@@ -324,11 +328,7 @@ public class EventServiceImpl implements EventService {
             rangeStart = LocalDateTime.now();
         }
 
-        if (rangeEnd == null) {
-            rangeEnd = LocalDateTime.now();
-        }
-
-        if (rangeStart.isAfter(rangeEnd)) {
+        if (rangeEnd != null && rangeStart.isAfter(rangeEnd)) {
             throw new ValidationException("rangeStart не может быть позже rangeEnd");
         }
 
@@ -341,10 +341,10 @@ public class EventServiceImpl implements EventService {
                 .and(onlyAvailable != null && onlyAvailable ? EventSpecifications.onlyAvailable() : null);
 
         Pageable pageable = PageRequest.of(from / size, size);
-        List<Event> events = eventRepository.findAll(spec, pageable).getContent();
+        List<Event> events = new ArrayList<>(eventRepository.findAll(spec, pageable).getContent());
 
         try {
-            Thread.sleep(500);
+            Thread.sleep(1500);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }
@@ -359,13 +359,13 @@ public class EventServiceImpl implements EventService {
                 default -> throw new ValidationException("sort должен быть либо VIEWS, либо EVENT_DATE");
             }
         }
-
         return events.stream()
                 .map(eventMapper::toShortDto)
                 .toList();
     }
 
     @Override
+    @Transactional(readOnly = true)
     public EventFullDto getEventByIdPublic(Long eventId, HttpServletRequest httpServletRequest) {
         Event event = checkEvent(eventId);
 
@@ -373,7 +373,7 @@ public class EventServiceImpl implements EventService {
             throw new NotFoundException("Событие не опубликовано");
         }
 
-        String uri = httpServletRequest.getRequestURI();
+        String uri = "/events/" + eventId;
         String ip = httpServletRequest.getRemoteAddr();
         statClient.createHit(EndpointHitDto.builder()
                 .app("main-service")
@@ -383,45 +383,65 @@ public class EventServiceImpl implements EventService {
                 .build());
 
         try {
-            Thread.sleep(500);
+            Thread.sleep(1500);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }
 
-        setViews(List.of(event));
+        setViews(event);
         return eventMapper.toFullDto(event);
+    }
+
+    private void setViews(Event event) {
+        List<ViewStats> stats = statClient.getStats(
+                event.getPublishedOn(),
+                LocalDateTime.now().plusMinutes(1),
+                List.of("/events/" + event.getId()),
+                true
+        );
+        long views = stats.isEmpty() ? 0 : stats.getFirst().getHits();
+        event.setViews(views);
     }
 
     private void setViews(List<Event> events) {
         if (events.isEmpty()) {
             return;
         }
+
         List<String> uris = new ArrayList<>();
         LocalDateTime start = null;
-
         for (Event event : events) {
             if (event.getPublishedOn() != null) {
-                String uri = "/events/" + event.getId();
-                uris.add(uri);
+                uris.add("/events/" + event.getId());
                 if (start == null || event.getPublishedOn().isBefore(start)) {
                     start = event.getPublishedOn();
                 }
             }
         }
+
         if (start == null) {
             return;
         }
-        List<ViewStats> stats = statClient.getStats(start, LocalDateTime.now(), uris, true);
-        if (stats.isEmpty()) {
-            log.info("Нет данных о просмотрах для событий: {}", uris);
+
+        List<ViewStats> stats = statClient.getStats(
+                start,
+                LocalDateTime.now().plusMinutes(1),
+                uris,
+                true
+        );
+
+        if (stats.isEmpty() || stats == null) {
             return;
         }
-        Map<String, Long> viewsMap = stats.stream()
-                .collect(Collectors.toMap(ViewStats::getUri, ViewStats::getHits));
+
+        Map<Long, Long> viewsById = stats.stream()
+                .collect(Collectors.toMap(
+                        viewStats -> Long.parseLong(viewStats.getUri().substring(viewStats.getUri().lastIndexOf("/") + 1)),
+                        ViewStats::getHits
+                ));
 
         for (Event event : events) {
-            String uri = "/events/" + event.getId();
-            event.setViews(viewsMap.getOrDefault(uri, 0L));
+            event.setViews(viewsById.getOrDefault(event.getId(), 0L));
         }
     }
 

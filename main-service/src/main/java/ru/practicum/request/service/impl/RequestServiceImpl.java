@@ -43,12 +43,16 @@ public class RequestServiceImpl implements RequestService {
         if (event.getState() != EventState.PUBLISHED) {
             throw new ConflictException("Событие должно быть опубликовано");
         }
+
         if (event.getParticipantLimit() > 0 && event.getConfirmedRequests() >= event.getParticipantLimit()) {
             throw new ConflictException("Закончились места на мероприятия");
         }
-        RequestState state = RequestState.PENDING;
-        if (event.getParticipantLimit() == 0) {
+        RequestState state;
+        if (!event.getRequestModeration() || event.getParticipantLimit() == 0) {
             state = RequestState.CONFIRMED;
+            event.setConfirmedRequests(event.getConfirmedRequests() + 1);
+        } else {
+            state = RequestState.PENDING;
         }
 
         Request request = Request.builder()

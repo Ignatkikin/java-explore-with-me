@@ -16,6 +16,7 @@ import ru.practicum.compilation.service.CompilationService;
 import ru.practicum.event.repository.EventRepository;
 import ru.practicum.exception.NotFoundException;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -36,6 +37,9 @@ public class CompilationServiceImpl implements CompilationService {
             compilation.setEvents(eventRepository.findAllByIdIn(eventsId));
         }
         CompilationDto compilationDto = compilationMapper.toCompilationDto(compilationRepository.save(compilation));
+        if (compilationDto.getEvents() == null) {
+            compilationDto.setEvents(new HashSet<>());
+        }
         log.info("Compilation с id {} успешно создан", compilationDto.getId());
         return compilationDto;
     }

@@ -12,8 +12,10 @@ import ru.practicum.user.mapper.UserMapper;
 @Mapper(componentModel = "spring", uses = {CategoryMapper.class, LocationMapper.class, UserMapper.class})
 public interface EventMapper {
 
+    @Mapping(source = "views", target = "views")
     EventFullDto toFullDto(Event event);
 
+    @Mapping(source = "views", target = "views")
     EventShortDto toShortDto(Event event);
 
     @Mapping(target = "id", ignore = true)
