@@ -1,7 +1,6 @@
 package ru.practicum.compilation.dto;
 
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -19,7 +18,6 @@ public class NewCompilationDto {
     @Builder.Default
     private Boolean pinned = false;
 
-    @NotNull(message = "пустой title")
     @NotBlank(message = "пустой title")
     @Size(min = 1, max = 50)
     private String title;

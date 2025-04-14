@@ -19,7 +19,6 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class NewEventDto {
 
-    @NotNull
     @NotBlank
     @Size(min = 20, max = 2000, message = "поле annotation должно содержать от 20 до 2000 символом")
     private String annotation;
@@ -27,7 +26,6 @@ public class NewEventDto {
     @NotNull
     private Long category;
 
-    @NotNull
     @NotBlank
     @Size(min = 20, max = 7000, message = "поле description должно содержать от 20 до 2000 символом")
     private String description;
@@ -50,7 +48,6 @@ public class NewEventDto {
     @Builder.Default
     private Boolean requestModeration = true;
 
-    @NotNull
     @NotBlank
     @Size(min = 3, max = 120, message = "поле title должно содержать от 3 до 120 символом")
     private String title;
