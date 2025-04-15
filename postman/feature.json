@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "63960798-d28e-481a-85fc-56e2e037841c",
+		"_postman_id": "415c3545-9781-45b6-ba8b-8b13d6453983",
 		"name": "Feature",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "38693972"
@@ -172,7 +172,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/users/1/events",
+							"raw": "http://localhost:8080/users/138/events",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -180,7 +180,7 @@
 							"port": "8080",
 							"path": [
 								"users",
-								"1",
+								"138",
 								"events"
 							]
 						}
@@ -202,7 +202,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/users/2/events",
+							"raw": "http://localhost:8080/users/139/events",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -210,7 +210,7 @@
 							"port": "8080",
 							"path": [
 								"users",
-								"2",
+								"139",
 								"events"
 							]
 						}
@@ -232,7 +232,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/users/2/events",
+							"raw": "http://localhost:8080/users/139/events",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -240,7 +240,7 @@
 							"port": "8080",
 							"path": [
 								"users",
-								"2",
+								"139",
 								"events"
 							]
 						}
@@ -262,7 +262,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/admin/events/1",
+							"raw": "http://localhost:8080/admin/events/107",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -271,7 +271,7 @@
 							"path": [
 								"admin",
 								"events",
-								"1"
+								"107"
 							]
 						}
 					},
@@ -292,7 +292,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/admin/events/2",
+							"raw": "http://localhost:8080/admin/events/108",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -301,7 +301,7 @@
 							"path": [
 								"admin",
 								"events",
-								"2"
+								"108"
 							]
 						}
 					},
@@ -333,7 +333,7 @@
 									"    pm.expect(jsonData).to.have.property(\"eventId\");\r",
 									"\r",
 									"    pm.expect(jsonData.text).to.eql(\"Спасибо за классное событие!\");\r",
-									"    pm.expect(jsonData.eventId).to.eql(2);\r",
+									"    pm.expect(jsonData.eventId).to.eql(108);\r",
 									"});"
 								],
 								"type": "text/javascript",
@@ -365,7 +365,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/users/1/comments/2",
+							"raw": "http://localhost:8080/users/138/comments/108",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -373,9 +373,9 @@
 							"port": "8080",
 							"path": [
 								"users",
-								"1",
+								"138",
 								"comments",
-								"2"
+								"108"
 							]
 						}
 					},
@@ -424,7 +424,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/users/3/comments/2",
+							"raw": "http://localhost:8080/users/99999/comments/108",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -432,9 +432,9 @@
 							"port": "8080",
 							"path": [
 								"users",
-								"3",
+								"99999",
 								"comments",
-								"2"
+								"108"
 							]
 						}
 					},
@@ -483,7 +483,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/users/1/comments/2",
+							"raw": "http://localhost:8080/users/138/comments/108",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -491,9 +491,9 @@
 							"port": "8080",
 							"path": [
 								"users",
-								"1",
+								"138",
 								"comments",
-								"2"
+								"108"
 							]
 						}
 					},
@@ -541,7 +541,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/users/1/comments/3",
+							"raw": "http://localhost:8080/users/138/comments/109",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -549,9 +549,9 @@
 							"port": "8080",
 							"path": [
 								"users",
-								"1",
+								"138",
 								"comments",
-								"3"
+								"109"
 							]
 						}
 					},
@@ -578,7 +578,7 @@
 									"    pm.expect(jsonData).to.have.property(\"eventId\");\r",
 									"\r",
 									"    pm.expect(jsonData.text).to.eql(\"Спасибо за замечательное событие!\");\r",
-									"    pm.expect(jsonData.eventId).to.eql(1);\r",
+									"    pm.expect(jsonData.eventId).to.eql(107);\r",
 									"});"
 								],
 								"type": "text/javascript",
@@ -610,7 +610,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/users/2/comments/1",
+							"raw": "http://localhost:8080/users/139/comments/107",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -618,9 +618,9 @@
 							"port": "8080",
 							"path": [
 								"users",
-								"2",
+								"139",
 								"comments",
-								"1"
+								"107"
 							]
 						}
 					},
@@ -671,7 +671,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/users/2/comments/2",
+							"raw": "http://localhost:8080/users/139/comments/2",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -679,7 +679,7 @@
 							"port": "8080",
 							"path": [
 								"users",
-								"2",
+								"139",
 								"comments",
 								"2"
 							]
@@ -729,7 +729,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/users/1/comments/2",
+							"raw": "http://localhost:8080/users/138/comments/2",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -737,7 +737,7 @@
 							"port": "8080",
 							"path": [
 								"users",
-								"1",
+								"138",
 								"comments",
 								"2"
 							]
@@ -788,7 +788,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/users/2/comments/2",
+							"raw": "http://localhost:8080/users/139/comments/2",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -796,7 +796,7 @@
 							"port": "8080",
 							"path": [
 								"users",
-								"2",
+								"139",
 								"comments",
 								"2"
 							]
@@ -847,7 +847,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/users/2/comments/10",
+							"raw": "http://localhost:8080/users/139/comments/99999",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -855,9 +855,9 @@
 							"port": "8080",
 							"path": [
 								"users",
-								"2",
+								"139",
 								"comments",
-								"10"
+								"99999"
 							]
 						}
 					},
@@ -945,7 +945,7 @@
 									"    pm.expect(json).to.have.property(\"id\");\r",
 									"    pm.expect(json).to.have.property(\"text\");\r",
 									"    pm.expect(json).to.have.property(\"created\");\r",
-									"    pm.expect(json.author.id).to.eql(2); // ожидаем, что автор — userId = 2\r",
+									"    pm.expect(json.author.id).to.eql(139);\r",
 									"});\r",
 									""
 								],
@@ -969,7 +969,7 @@
 							}
 						],
 						"url": {
-							"raw": "http://localhost:8080/users/2/comments/2",
+							"raw": "http://localhost:8080/users/139/comments/2",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -977,7 +977,7 @@
 							"port": "8080",
 							"path": [
 								"users",
-								"2",
+								"139",
 								"comments",
 								"2"
 							],
@@ -1026,7 +1026,7 @@
 							}
 						],
 						"url": {
-							"raw": "http://localhost:8080/users/1/comments/2",
+							"raw": "http://localhost:8080/users/138/comments/2",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -1034,7 +1034,7 @@
 							"port": "8080",
 							"path": [
 								"users",
-								"1",
+								"138",
 								"comments",
 								"2"
 							],
@@ -1084,7 +1084,7 @@
 							}
 						],
 						"url": {
-							"raw": "http://localhost:8080/users/1/comments/10",
+							"raw": "http://localhost:8080/users/138/comments/99999",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -1092,9 +1092,9 @@
 							"port": "8080",
 							"path": [
 								"users",
-								"1",
+								"138",
 								"comments",
-								"10"
+								"99999"
 							]
 						}
 					},
@@ -1231,7 +1231,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/users/1/comments/2",
+							"raw": "http://localhost:8080/users/138/comments/108",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -1239,9 +1239,9 @@
 							"port": "8080",
 							"path": [
 								"users",
-								"1",
+								"138",
 								"comments",
-								"2"
+								"108"
 							]
 						}
 					},
@@ -1273,7 +1273,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/users/1/comments/1",
+							"raw": "http://localhost:8080/users/138/comments/107",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -1281,9 +1281,9 @@
 							"port": "8080",
 							"path": [
 								"users",
-								"1",
+								"138",
 								"comments",
-								"1"
+								"107"
 							]
 						}
 					},
@@ -1333,7 +1333,7 @@
 							}
 						],
 						"url": {
-							"raw": "http://localhost:8080/users/1/comments?from=0&size=10",
+							"raw": "http://localhost:8080/users/138/comments?from=0&size=10",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -1341,7 +1341,7 @@
 							"port": "8080",
 							"path": [
 								"users",
-								"1",
+								"138",
 								"comments"
 							],
 							"query": [
@@ -1379,7 +1379,7 @@
 									"        pm.expect(comment).to.have.property(\"text\");\r",
 									"        pm.expect(comment).to.have.property(\"created\");\r",
 									"        pm.expect(comment).to.have.property(\"author\");\r",
-									"        pm.expect(comment).to.have.property(\"eventId\", 2); // ← ожидаемое значение\r",
+									"        pm.expect(comment).to.have.property(\"eventId\", 108);\r",
 									"    }\r",
 									"});\r",
 									""
@@ -1404,7 +1404,7 @@
 							}
 						],
 						"url": {
-							"raw": "http://localhost:8080/comments/2?from=0&size=10",
+							"raw": "http://localhost:8080/comments/108?from=0&size=10",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -1412,7 +1412,7 @@
 							"port": "8080",
 							"path": [
 								"comments",
-								"2"
+								"108"
 							],
 							"query": [
 								{
@@ -1745,7 +1745,7 @@
 							}
 						],
 						"url": {
-							"raw": "http://localhost:8080/users/2/comments/1",
+							"raw": "http://localhost:8080/users/139/comments/1",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -1753,7 +1753,7 @@
 							"port": "8080",
 							"path": [
 								"users",
-								"2",
+								"139",
 								"comments",
 								"1"
 							]
@@ -1795,7 +1795,7 @@
 							}
 						],
 						"url": {
-							"raw": "http://localhost:8080/users/2/comments/99999",
+							"raw": "http://localhost:8080/users/139/comments/99999",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -1803,7 +1803,7 @@
 							"port": "8080",
 							"path": [
 								"users",
-								"2",
+								"139",
 								"comments",
 								"99999"
 							]
@@ -1843,7 +1843,7 @@
 							}
 						],
 						"url": {
-							"raw": "http://localhost:8080/users/1/comments/1",
+							"raw": "http://localhost:8080/users/138/comments/1",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -1851,7 +1851,7 @@
 							"port": "8080",
 							"path": [
 								"users",
-								"1",
+								"138",
 								"comments",
 								"1"
 							]
